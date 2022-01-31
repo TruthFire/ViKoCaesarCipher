@@ -18,6 +18,8 @@ namespace CaesarCipher
             'L','l','M','m','N','n','O','o','P','p','Q','q','R','r','S','s','T','t','U','u','V','v',
             'W','w','X','x','Y','y','Z','z'
         };
+
+        
         public Form1()
         {
             InitializeComponent();
@@ -35,12 +37,12 @@ namespace CaesarCipher
             foreach (char c in input)
             {
                 letterIndex = Array.IndexOf(Letters, c); //Get index of required letter in Letters array
-                if(letterIndex == -1)
+                if (letterIndex == -1)
                 {
                     output += c;
                     continue;
                 }
-                else if(letterIndex <= Letters.Length - key * 2)
+                else if (letterIndex <= Letters.Length - key * 2)
                 {
                     output += Letters[letterIndex + key * 2].ToString();
                     continue;
@@ -52,7 +54,36 @@ namespace CaesarCipher
                 }
             }
 
-            return output+'\n';
+            return output;
+        }
+
+        protected string DecryptArray(string input, int key)
+        {
+            string output = "";
+
+            int letterIndex, EncryptedLetterIndex;
+            foreach (char c in input)
+            {
+                letterIndex = Array.IndexOf(Letters, c); //Get index of required letter in Letters array
+                if (letterIndex == -1)
+                {
+                    output += c;
+                    continue;
+                }
+                else if (letterIndex - (key * 2) < 0)
+                {
+                    output += Letters[Letters.Length + (letterIndex-key*2)].ToString();
+                    continue;
+                }
+                else if (letterIndex - key * 2 > 0) //
+                {
+                    EncryptedLetterIndex = letterIndex -  key * 2;
+                    output += Letters[EncryptedLetterIndex].ToString();
+                }
+            }
+
+            return output;
+
         }
 
         protected string EncryptASCII(string input, int key)
@@ -65,12 +96,12 @@ namespace CaesarCipher
                 {
                     if((int)c+key > 90 && (int)c+ key < 97)
                     {
-                        output += Convert.ToChar(65 + ((int)c + key - (int)c));
+                        output += Convert.ToChar(64 + ((int)c + key - 65));
                         continue;
                     }
                     else if ((int)c + key > 122)
                     {
-                        output += Convert.ToChar(97 + ((int)c + key - (int)c));
+                        output += Convert.ToChar(96 + ((int)c+key)-122);
                     }
                     else
                     {
@@ -89,17 +120,14 @@ namespace CaesarCipher
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(textBox1.Text))
-            {
-                MessageBox.Show("NO LETERZ");
-               
-            }
-            else
-            { 
-                this.textBox2.Text = EncryptASCII(this.textBox1.Text, (int)this.numericUpDown1.Value);
-                this.textBox2.Text += "\n";
-                this.textBox2.Text += EncryptArray(this.textBox1.Text, (int)this.numericUpDown1.Value);
-            }
+            this.textBox2.Text = EncryptASCII(this.textBox1.Text, (int)this.numericUpDown1.Value);
+            //this.textBox2.Text += EncryptArray(this.textBox1.Text, (int)this.numericUpDown1.Value);
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+          this.textBox1.Text = DecryptArray(this.textBox2.Text, (int)this.numericUpDown1.Value);
         }
     }
 }
