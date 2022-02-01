@@ -80,6 +80,10 @@ namespace CaesarCipher
                     EncryptedLetterIndex = letterIndex -  key * 2;
                     output += Letters[EncryptedLetterIndex].ToString();
                 }
+                else
+                {
+                    output += Letters[0];
+                }
             }
 
             return output;
@@ -96,12 +100,12 @@ namespace CaesarCipher
                 {
                     if((int)c+key > 90 && (int)c+ key < 97)
                     {
-                        output += Convert.ToChar(64 + ((int)c + key - 65));
+                        output += Convert.ToChar(64 + ((int)c + key - 90)); //NOT FIXED :(
                         continue;
                     }
                     else if ((int)c + key > 122)
                     {
-                        output += Convert.ToChar(96 + ((int)c+key)-122);
+                        output += Convert.ToChar(96 + ((int)c + key) - 122);
                     }
                     else
                     {
